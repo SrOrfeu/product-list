@@ -11,7 +11,7 @@ const PageProducts = () => {
         <>
         <PageProductsContainer>
             <h1>Page Products</h1>
-            <button label="submit" />
+            <Button label="submit" />
         </PageProductsContainer>
         </>
     );
