@@ -15,6 +15,9 @@ background-color: #f9f8fe;
 & .content {
     margin-top: 40px;
 }
+& label{
+    cursor: pointer;
+}
 
 `;
 
@@ -37,7 +40,8 @@ const PageProducts = () => {
     const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
     const [genders, setGenders] = useState([]);
-    
+    const [filters, setFilters] = useState([]);
+    const [estado, setEstado] = useState('');
 async function getBrands(){
    const response = await API.get('brands');
    setBrands(response.data);
@@ -52,6 +56,20 @@ async function getCategories(){
     const response = await API.get('genders');
     setGenders(response.data);
  }
+
+   function checkSelectItems(e){
+    let isSelected = e.target.checked;
+    let value = e.target.value;
+    if(!isSelected){
+        setFilters((prevData) => {
+            return prevData.filter((item) => item != value)
+        });
+        return;
+    }
+    setFilters([...filters, value])
+    
+   
+  }
 
 useEffect(() => {
     getBrands()
@@ -88,10 +106,13 @@ useEffect(() => {
                     <ul className="list-style-none">
                         {
                             brands.map((marca) => (
-                                <li  key={marca.brand_id} className="flex gap-3 mb-2">
-                                    <Checkbox id={marca.brand_name}/>
-                                    <label htmlFor={marca.brand_name}>{marca.brand_name}</label>
-                                </li>
+                                <li key={marca.brand_id} className="flex gap-3 mb-2">
+                    <Checkbox id={marca.brand_name} value={marca.brand_name}
+                    onChange={(e) => checkSelectItems(e)}
+                    checked={filters.includes(marca.brand_name)}
+                    />
+                    <label htmlFor={marca.brand_name}>{marca.brand_name}</label>
+                  </li>
                             ))
                         }
                         </ul>
@@ -102,7 +123,10 @@ useEffect(() => {
                     {
                             categories.map((c) => (
                                 <li  key={c.category_id} className="flex gap-3 mb-2">
-                                    <Checkbox id={c.category_name}/>
+                                    <Checkbox id={c.category_name} value={c.category_name}
+                                     onChange={(e) => checkSelectItems(e)}
+                                     checked={filters.includes(c.category_name)}
+                                     />
                                     <label htmlFor={c.category_name}>{c.category_name}</label>
                                 </li>
                             ))
@@ -113,7 +137,10 @@ useEffect(() => {
                     {
                             genders.map((g) => (
                                 <li  key={g.gender_id} className="flex gap-3 mb-2">
-                                    <Checkbox id={g.gender_name}/>
+                                    <Checkbox id={g.gender_name} value={g.gender_name}
+                                      onChange={(e) => checkSelectItems(e)}
+                                      checked={filters.includes(g.gender_name)}
+                                    />
                                     <label htmlFor={g.gender_name}>{g.gender_name}</label>
                                 </li>
                             ))
@@ -122,12 +149,20 @@ useEffect(() => {
                     <h6 className="mb-2 mt-3">Estado</h6>
                     <ul className="list-style-none">
                         <li className="flex gap-3 mb-2">
-                            <RadioButton id="marca1"/>
-                         <label htmlFor="marca1">Novo</label>   
+                            <RadioButton 
+                            id="novo"
+                            onChange={() => setEstado('novo')}
+                            checked={estado == 'novo'}
+                            />
+                         <label htmlFor="novo" onClick={() => setEstado('novo')}>Novo</label>   
                              </li>
                              <li className="flex gap-3 mb-2">
-                            <RadioButton id="marca1"/>
-                         <label htmlFor="marca1">Usado</label>   
+                            <RadioButton id="usado"
+                              onChange={() => setEstado('usado')}
+                              checked={estado == 'usado'}
+                            
+                            />
+                         <label htmlFor="usado" onClick={() => setEstado('usado')}>Usado</label>   
                              </li>
                              </ul>
                 </div>
