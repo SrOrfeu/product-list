@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Checkbox } from 'primereact/checkbox';
 import { RadioButton } from 'primereact/radiobutton';
 import { API } from "../../services";
+import Product from "../../components/Product";
         
 
 const PageProductsContainer = styled.div`
@@ -167,7 +168,16 @@ useEffect(() => {
                              </ul>
                 </div>
            </div>
-            <div className="w-9">Cards </div>
+            <div className="w-9">
+             <Product
+              classes="w-4" 
+              name="nome do produto"
+              categoryName="categoria"
+              discount="30"
+              price="200"
+              
+              />    
+             </div>
            </div>
         </PageProductsContainer>
         </>
