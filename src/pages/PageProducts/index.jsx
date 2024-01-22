@@ -41,7 +41,9 @@ const PageProducts = () => {
     const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
     const [genders, setGenders] = useState([]);
+    const [product, setProducts] = useState([]);
     const [filters, setFilters] = useState([]);
+    const [itensfiltrados, setItensFiltrados] = useState([]);
     const [estado, setEstado] = useState('');
 async function getBrands(){
    const response = await API.get('brands');
@@ -58,6 +60,12 @@ async function getCategories(){
     setGenders(response.data);
  }
 
+
+ async function getProducts(){
+    const response = await API.get('products');
+    setProducts(response.data);
+ }
+
    function checkSelectItems(e){
     let isSelected = e.target.checked;
     let value = e.target.value;
@@ -72,11 +80,29 @@ async function getCategories(){
    
   }
 
+  function filterItens(filterType, product){
+    switch(filterType){
+        case 1:
+            return setItensFiltrados(product.sort((a, b) => a.product_price - b.product_price));
+        case 2:
+             return setItensFiltrados(product.sort((a, b) => b.product_price - a.product_price));
+        case 3:
+            return setItensFiltrados(product.sort((a, b) => a.product_price - b.product_price));
+    }
+  }
+
+  useEffect(() => {
+    filterItens(ordenacao)
+}, {ordenacao});
+
+
 useEffect(() => {
-    getBrands()
-    getCategories()
-    getGenders()
+    getBrands();
+    getCategories();
+    getGenders();
+    getProducts();
 }, []);
+
 
 
 
@@ -92,7 +118,7 @@ useEffect(() => {
                 options={tiposDeOrdenacao}
                 optionLabel="name"
                 optionValue="value"
-                onChange={e => setOrdenacao(e.value)}
+                onChange={e => setOrdenacao(e.target.value)}
                 className="border-0 bg-transparent"
                 />
                 </h6>
@@ -168,15 +194,20 @@ useEffect(() => {
                              </ul>
                 </div>
            </div>
-            <div className="w-9">
-             <Product
-              classes="w-4" 
-              name="nome do produto"
-              categoryName="categoria"
-              discount="30"
-              price="200"
-              
-              />    
+            <div className="w-9 flex flex-wrap gap-3">
+                {
+                    product.map(p => (
+                        <Product
+                        key={p.product_id}
+                        name={p.product_name}
+                        image={p.product_image}
+                        categoryName={p.category_name}
+                        discount={p.product_discount}
+                        price={p.product_price}
+                        />    
+                    ))
+                }
+            
              </div>
            </div>
         </PageProductsContainer>
