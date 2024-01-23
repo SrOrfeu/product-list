@@ -25,18 +25,18 @@ background-color: #f9f8fe;
 const PageProducts = () => {
     const [ordenacao, setOrdenacao] = useState(1);
     const tiposDeOrdenacao = [
-        {
-            name: "mais relevantes",
-            value: 1
-        },
-        {
-            name: 'menor valor',
-            value: 2
-        },
-        {
-            name: 'maior valor',
-            value: 3
-        }
+      {
+        name: "Mais relevantes",
+        value: 1,
+      },
+      {
+        name: "Menor valor",
+        value: 2,
+      },
+      {
+        name: "Maior valor",
+        value: 3,
+      },
     ];
     const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -80,20 +80,20 @@ async function getCategories(){
    
   }
 
-  function filterItens(filterType, product){
+  function filterItens(filterType){
     switch(filterType){
-        case 1:
-            return setItensFiltrados(product.sort((a, b) => a.product_price - b.product_price));
-        case 2:
-             return setItensFiltrados(product.sort((a, b) => b.product_price - a.product_price));
-        case 3:
-            return setItensFiltrados(product.sort((a, b) => a.product_price - b.product_price));
+      case 1:
+        return setItensFiltrados(product.sort((a, b) => b.product_rate - a.product_rate));
+      case 2:
+        return setItensFiltrados(product.sort((a, b) => b.product_price - a.product_price));
+      case 3:
+        return setItensFiltrados(product.sort((a, b) => a.product_price - b.product_price));
     }
   }
-
+  
   useEffect(() => {
     filterItens(ordenacao)
-}, {ordenacao});
+  }, [ordenacao]);
 
 
 useEffect(() => {
